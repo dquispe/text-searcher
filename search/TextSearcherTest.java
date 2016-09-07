@@ -28,7 +28,7 @@ public class TextSearcherTest {
 		String[] results = searcher.search("sketch", 0);
 		assertArraysEqual(expected, results);
 	}
-	
+
 	/** Next simplest case, no context and multiple hits. */
 	@Test
 	public void testMultipleHitsNoContext() throws Exception {
@@ -38,7 +38,7 @@ public class TextSearcherTest {
 		String[] results = searcher.search("naturalists", 0);
 		assertArraysEqual(expected, results);
 	}
-	
+
 	/** This is the example from the document. */
 	@Test
 	public void testBasicSearch() throws Exception {
@@ -143,7 +143,7 @@ public class TextSearcherTest {
 		TextSearcher searcher = new TextSearcher(file);
 		String[] expected;
 		String[] results;
-		
+
 		// Just runs the same queries as other tests, but on a single TextSearcher instance:
 		expected = new String[] {
 				"on the Origin of Species.  Until recently the great",
@@ -151,17 +151,17 @@ public class TextSearcherTest {
 				"hand, have believed that species undergo modification, and that" };
 		results = searcher.search("species",4);
 		assertArraysEqual(expected,results);
-		
+
 		expected = new String[] { "I will here give a brief sketch" };
 		results = searcher.search("here",4);
 		assertArraysEqual(expected,results);
-		
+
 		expected = new String[] { "and that the existing forms of life",
 									"generation of pre existing forms." };
 		results = searcher.search("existing",3);
 		assertArraysEqual(expected,results);
 	}
-	
+
 	/** Overlapping hits should just come back as separate hits. */
 	@Test
 	public void testOverlappingHits() throws Exception {
@@ -186,7 +186,7 @@ public class TextSearcherTest {
 		Assert.assertNotNull(results);
 		Assert.assertEquals(0, results.length);
 	}
-	
+
 	/** Verify the tokenizer. This should always pass. */
 	@Test
 	public void testTokenizer() throws Exception {
@@ -195,12 +195,12 @@ public class TextSearcherTest {
 		String[] expected = { "123",", ","789", ": def" };
 		TextTokenizer lexer = new TextTokenizer(input,"[0-9]+");
 		List<String> tokens = new ArrayList<String>();
-		while (lexer.hasNext()) { 
+		while (lexer.hasNext()) {
 			tokens.add(lexer.next());
 		}
 		String[] results = (String[])tokens.toArray(new String[tokens.size()]);
 		assertArraysEqual(expected,results);
-		
+
 		Assert.assertTrue(lexer.isWord("1029384"));
 		Assert.assertFalse(lexer.isWord("1029388 "));
 		Assert.assertFalse(lexer.isWord("123,456"));
