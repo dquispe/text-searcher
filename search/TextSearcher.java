@@ -4,8 +4,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TextSearcher {
+
+	/**
+	* List of words in text document
+	*/
+	private List<String> tokens = new ArrayList<String>();
 
 	/**
 	 * Initializes the text searcher with the contents of a text file.
@@ -33,7 +40,10 @@ public class TextSearcher {
 	 *  this class to implement search efficiently.
 	 */
 	protected void init(String fileContents) {
-		// TODO -- fill in implementation
+		TextTokenizer lexer = new TextTokenizer(fileContents, "[a-zA-Z0-9']+");
+		while(lexer.hasNext()){
+			tokens.add(lexer.next());
+		}
 	}
 
 	/**
@@ -44,8 +54,16 @@ public class TextSearcher {
 	 * @return One context string for each time the query word appears in the file.
 	 */
 	public String[] search(String queryWord,int contextWords) {
-		// TODO -- fill in implementation
-		return new String[0];
+		List<String> wordsMatched = new ArrayList<String>();
+
+		for(int i = 0; i < tokens.size(); i++){
+			String currWord = tokens.get(i);
+			if(queryWord.equals(currWord)){
+				wordsMatched.add(currWord);
+			}
+		}
+
+		return wordsMatched.toArray(new String[wordsMatched.size()]);
 	}
 }
 
