@@ -18,6 +18,7 @@ public class TextSearcher {
 	* Tokenizer to break down text into valid words
 	*/
 	private TextTokenizer lexer;
+
 	/**
 	 * Initializes the text searcher with the contents of a text file.
 	 * The current implementation just reads the contents into a string
@@ -62,25 +63,32 @@ public class TextSearcher {
 		queryWord = queryWord.toLowerCase();
 
 		for(int i = 0; i < this.tokens.size(); i++){
-			String currWord = this.tokens.get(i).toLowerCase();
-			if(queryWord.equals(currWord)){
+			String currWord = this.tokens.get(i);
+
+			if(queryWord.equals(currWord.toLowerCase())){
 				int leftContext = 0;
 				int rightContext = 0;
 
 				for(int leftIndex = 1; leftContext < contextWords; leftIndex++){
+					if(i - leftIndex < 0) break;
+
 					String possibleLeftWord = this.tokens.get(i - leftIndex);
+
 					if(this.lexer.isWord(possibleLeftWord)){
 						leftContext++;
 					}
-					 currWord = possibleLeftWord + currWord;
+					currWord = possibleLeftWord + currWord;
 				}
 
 				for(int rightIndex = 1; rightContext < contextWords; rightIndex++){
+					if(i + rightIndex >= this.tokens.size()) break;
+
 					String possibleRightWord = this.tokens.get(i + rightIndex);
+
 					if(this.lexer.isWord(possibleRightWord)){
 						rightContext++;
 					}
-					 currWord = currWord + possibleRightWord;
+					currWord = currWord + possibleRightWord;
 				}
 				wordsMatched.add(currWord);
 			}
