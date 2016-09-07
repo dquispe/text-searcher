@@ -15,6 +15,10 @@ public class TextSearcher {
 	private List<String> tokens = new ArrayList<String>();
 
 	/**
+	* Tokenizer to break down text into valid words
+	*/
+	private TextTokenizer lexer;
+	/**
 	 * Initializes the text searcher with the contents of a text file.
 	 * The current implementation just reads the contents into a string
 	 * and passes them to #init().  You may modify this implementation if you need to.
@@ -40,9 +44,9 @@ public class TextSearcher {
 	 *  this class to implement search efficiently.
 	 */
 	protected void init(String fileContents) {
-		TextTokenizer lexer = new TextTokenizer(fileContents, "[a-zA-Z0-9']+");
-		while(lexer.hasNext()){
-			tokens.add(lexer.next());
+		this.lexer = new TextTokenizer(fileContents, "[a-zA-Z0-9']+");
+		while(this.lexer.hasNext()){
+			this.tokens.add(this.lexer.next());
 		}
 	}
 
@@ -55,10 +59,29 @@ public class TextSearcher {
 	 */
 	public String[] search(String queryWord,int contextWords) {
 		List<String> wordsMatched = new ArrayList<String>();
+		queryWord = queryWord.toLowerCase();
 
-		for(int i = 0; i < tokens.size(); i++){
-			String currWord = tokens.get(i);
+		for(int i = 0; i < this.tokens.size(); i++){
+			String currWord = this.tokens.get(i).toLowerCase();
 			if(queryWord.equals(currWord)){
+				int leftContext = 0;
+				int rightContext = 0;
+
+				for(int leftIndex = 1; leftContext < contextWords; leftIndex++){
+					String possibleLeftWord = this.tokens.get(i - leftIndex);
+					if(this.lexer.isWord(possibleLeftWord)){
+						leftContext++;
+					}
+					 currWord = possibleLeftWord + currWord;
+				}
+
+				for(int rightIndex = 1; rightContext < contextWords; rightIndex++){
+					String possibleRightWord = this.tokens.get(i + rightIndex);
+					if(this.lexer.isWord(possibleRightWord)){
+						rightContext++;
+					}
+					 currWord = currWord + possibleRightWord;
+				}
 				wordsMatched.add(currWord);
 			}
 		}
